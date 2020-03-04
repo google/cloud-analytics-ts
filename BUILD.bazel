@@ -1,0 +1,69 @@
+load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("@npm_bazel_jasmine//:index.bzl", "jasmine_node_test")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "constants",
+    srcs = [
+        "constants.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":interfaces",
+    ],
+)
+
+ts_library(
+    name = "interfaces",
+    srcs = [
+        "client_info.ts",
+        "cloud_event.ts",
+        "survey_response.ts",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+ts_library(
+    name = "browser",
+    srcs = [
+        "browser_cloud_analytics.ts",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":constants",
+        ":interfaces",
+        "//event_flushing:browser_event_flushing",
+        "//event_flushing:interface",
+        "//implementation:cloud_analytics",
+        "//network:browser_network",
+        "@npm//typescript",
+    ],
+)
+
+ts_library(
+    name = "node",
+    srcs = [
+        "node_cloud_analytics.ts",
+    ],
+    runtime = "nodejs",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":constants",
+        ":interfaces",
+        "//event_flushing:interface",
+        "//event_flushing:node_event_flushing",
+        "//implementation:cloud_analytics",
+        "//network:node_network",
+        "@npm//typescript",
+    ],
+)
+
+jasmine_node_test(
+    name = "node_test",
+    deps = [
+        "//event_flushing:node_events_test",
+        "//network:node_network_test",
+        "@npm//jasmine",
+    ],
+)

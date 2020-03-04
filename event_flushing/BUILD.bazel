@@ -1,0 +1,60 @@
+load("@npm_bazel_typescript//:index.bzl", "ts_library")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_library(
+    name = "interface",
+    srcs = [
+        "batch_event_flushing_strategy.ts",
+    ],
+)
+
+ts_library(
+    name = "browser_event_flushing",
+    srcs = [
+        "document_events.ts",
+        "window_events.ts",
+    ],
+    deps = [
+        ":interface",
+        "@npm//typescript",
+    ],
+)
+
+ts_library(
+    name = "node_event_flushing",
+    srcs = [
+        "node_events.ts",
+    ],
+    runtime = "nodejs",
+    deps = [
+        ":interface",
+        "@npm//@types/node",
+        "@npm//typescript",
+    ],
+)
+
+ts_library(
+    name = "browser_event_flushing_tests",
+    testonly = True,
+    srcs = [
+        "document_events_test.ts",
+        "window_events_test.ts",
+    ],
+    deps = [
+        ":browser_event_flushing",
+        "@npm//@types/jasmine",
+        "@npm//typescript",
+    ],
+)
+
+ts_library(
+    name = "node_events_test",
+    testonly = True,
+    srcs = ["node_events_test.ts"],
+    deps = [
+        ":node_event_flushing",
+        "@npm//@types/jasmine",
+        "@npm//@types/node",
+    ],
+)

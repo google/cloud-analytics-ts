@@ -1,0 +1,59 @@
+load("@npm_bazel_typescript//:index.bzl", "ts_library")
+
+package(default_visibility = ["//:__subpackages__"])
+
+ts_library(
+    name = "browser_network",
+    srcs = [
+        "browser.ts",
+    ],
+    deps = [":interface"],
+)
+
+ts_library(
+    name = "browser_network_tests",
+    testonly = True,
+    srcs = [
+        "browser_test.ts",
+    ],
+    deps = [
+        ":browser_network",
+        ":interface",
+        "//:interfaces",
+        "@npm//@types/jasmine",
+    ],
+)
+
+ts_library(
+    name = "interface",
+    srcs = [
+        "log_request.ts",
+        "log_request_transmitter.ts",
+    ],
+    deps = ["//:interfaces"],
+)
+
+ts_library(
+    name = "node_network",
+    srcs = [
+        "node.ts",
+    ],
+    runtime = "nodejs",
+    deps = [
+        ":interface",
+        "@npm//@types/node",
+    ],
+)
+
+ts_library(
+    name = "node_network_test",
+    testonly = True,
+    srcs = ["node_test.ts"],
+    deps = [
+        ":interface",
+        ":node_network",
+        "//:interfaces",
+        "@npm//@types/jasmine",
+        "@npm//@types/node",
+    ],
+)

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": ["node"],
+    "target": "es5",
+    "downlevelIteration": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
